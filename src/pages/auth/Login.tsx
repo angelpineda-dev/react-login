@@ -1,11 +1,13 @@
 /* React */
 import { useState } from 'react';
 /* Libraries */
-
+import { Navigate } from 'react-router';
 /* helpers */
 import requestData from '../../helpers/request';
+/* Components */
 import { useAuth } from '../../components/context/Auth/AuthProvider';
-import { Navigate } from 'react-router';
+/* styles */
+import './login.css';
 
 interface ILogin {
     email: string;
@@ -31,10 +33,13 @@ const Login = () => {
         e.preventDefault();
         
         let response = await requestData({method:'post', endpoint: '/auth/login', data: formData});
-        let { token, user } = await response;
+        
+        if(response.status){
+            let { token, user } = await response;
+            auth.saveUser(user);
+            window.localStorage.setItem('token', JSON.stringify(token));
+        }
 
-        auth.saveUser(user);
-        window.localStorage.setItem('token', JSON.stringify(token));
 
     }
 
@@ -43,17 +48,25 @@ const Login = () => {
     }
 
   return (
-    <div>
-          <h2>Login</h2>
+    <div className='login'>
 
-          <form onSubmit={onSubmit}>
-            <label htmlFor="email">Email</label>
-            <input type="email" name='email' value={formData.email} onChange={(e) => handleInputData(e)}/>
+          <h2 className='login__title'>Login</h2>
 
-            <label htmlFor="password">Password</label>
-              <input type="password" name='password' value={formData.password} onChange={(e) => handleInputData(e)} />
+          <form onSubmit={onSubmit} className='login__form'>
+            <div className='form__item'>
+                  <label htmlFor="email" className='form__item-label'>Email</label>
+                  <input type="email" name='email' value={formData.email} onChange={(e) => handleInputData(e)} className='form__item-input' required />
+            </div>
 
-            <input type="submit" value="Login" />
+            <div className='form__item'>
+                  <label htmlFor="password" className='form__item-label'>Password</label>
+                  <input type="password" name='password' value={formData.password} onChange={(e) => handleInputData(e)} className='form__item-input' required />
+            </div>
+
+            <div className='form__item'>
+                  <a href="/auth/register">Signup</a>
+                  <input type="submit" value="Login" className='form__item-input' />
+            </div>
           </form>
     </div>
   )
