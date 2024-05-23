@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { AxiosInterceptor } from './interceptors/axios.interceptor.ts'
 /* Context */
 import {AuthProvider} from './components/context/Auth/AuthProvider.tsx';
+import { GlobalProvider } from  './components/context/Global/GlobalProvider.tsx';
 /* Components */
 import Router from './components/Router/Router.tsx';
 import Compose from './components/context/Compose/Compose.tsx';
@@ -13,7 +14,7 @@ import './index.css'
 AxiosInterceptor();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <Compose components={[AuthProvider]}>
+    <Compose components={[AuthProvider, GlobalProvider]}>
         <Router />
     </Compose>,
 )

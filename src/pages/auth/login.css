@@ -1,0 +1,23 @@
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+.form__item{
+    width: 100%;
+    margin: 16px 0;
+    padding: 8px 0;
+
+}
+
+.form__item:last-child{
+    display: flex;
+    justify-content: space-between;
+}
+
+.form__item-label{
+    display: block;
+}
