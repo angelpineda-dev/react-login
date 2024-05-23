@@ -3,7 +3,6 @@ import { useState, useEffect, createContext, useContext } from 'react';
 
 import requestData from '../../../helpers/request';
 import { IUser } from '../../../interfaces/models';
-import axios from 'axios';
 
 
 interface IAuthContext {
@@ -37,11 +36,11 @@ export const AuthProvider = ({children}:IAuthProvider) => {
                 setLoading(true);
                 let authorization = JSON.parse(token);
 
-                const response = await axios.get('http://localhost:8080/api/auth/me', {
-                    headers: {
-                        'Content-type': 'application/json', Authorization: `${authorization}`
-                }
-                })
+                const response =  await requestData({ 
+                    method: 'get', 
+                    endpoint:'/auth/me', headers: {
+                    Authorization: `${authorization}`
+                } })
 
                 setUser(response?.data?.user)
                 setIsAuthenticated(true)

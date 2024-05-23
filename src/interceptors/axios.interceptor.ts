@@ -12,6 +12,7 @@ export const AxiosInterceptor = () => {
         return response
     }, function (error) {
 
+        
         let errors = error?.response?.data?.error;
 
         errors.forEach((err) => {

@@ -1,13 +1,14 @@
+/* React */
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-/* helpers */
-import { AxiosInterceptor } from './helpers/axiosInterceptor.ts'
-
+/* Libraries */
+import { AxiosInterceptor } from './interceptors/axios.interceptor.ts'
+/* Context */
+import {AuthProvider} from './components/context/Auth/AuthProvider.tsx';
+/* Components */
+import Router from './components/Router/Router.tsx';
+import Compose from './components/context/Compose/Compose.tsx';
 /* Styles */
 import './index.css'
-import Compose from './components/context/Compose/Compose.tsx';
-import {AuthProvider} from './components/context/Auth/AuthProvider.tsx';
-import Router from './components/Router/Router.tsx';
 
 AxiosInterceptor();
 
