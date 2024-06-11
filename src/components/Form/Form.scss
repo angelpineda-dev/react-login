@@ -1,0 +1,32 @@
+
+.title{
+    @apply text-center w-full;
+}
+
+.form{
+    @apply grid grid-cols-12 gap-4;
+}
+
+.form__field{
+    @apply overflow-hidden p-1;
+
+    #{&}-label{
+        @apply inline-block w-full;
+    }
+
+    #{&}-input{
+        @apply px-2 py-1 outline outline-gray-400 rounded-sm w-full;
+    }
+
+    #{&}-error{
+        @apply text-red-600 mt-1 px-1 bg-red-200 rounded-sm w-full;
+    }
+}
+
+.form_footer {
+    @apply col-span-12 flex flex-row justify-between;
+
+    input[type='submit'] {
+        @apply self-end border bg-slate-800 font-bold text-white p-1 rounded;
+    }
+}

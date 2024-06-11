@@ -6,8 +6,12 @@ import { Navigate } from 'react-router';
 import requestData from '../../helpers/request';
 /* Components */
 import { useAuth } from '../../components/context/Auth/AuthProvider';
-/* styles */
-import './login.css';
+/* Styles */
+import "./login.scss";
+
+import Form from '../../components/Form/Form';
+import { FormInput } from '../../components/Form/FormInput';
+import { useForm } from 'react-hook-form';
 
 interface ILogin {
     email: string;
@@ -15,8 +19,24 @@ interface ILogin {
 }
 
 const Login = () => {
-    const [formData, setFormData] = useState<ILogin>({email: "", password: ""});
     const auth = useAuth();
+    const { register, handleSubmit, formState:{errors} } = useForm();
+    const [formData, setFormData] = useState<ILogin>({email: "", password: ""});
+
+    const formFields = {
+        email: register('email', {
+            required:{
+                value: true,
+                message: "Field required"
+            }
+        }),
+        password: register('password', {
+            required: {
+                value: true,
+                message: "Field required"
+            }
+        })
+    }
     
     
     function handleInputData(e: React.SyntheticEvent) {
@@ -29,46 +49,55 @@ const Login = () => {
         })
     }
     
-    async function onSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        
-        let response = await requestData({method:'post', endpoint: '/auth/login', data: formData});
-        
-        if(response.status){
+    async function onSubmit(data:any) {
+
+        let response = await requestData({ method: 'post', endpoint: '/auth/login', data });
+
+        if (response.status) {
             let { token, user } = await response;
             auth.saveUser(user);
             window.localStorage.setItem('token', JSON.stringify(token));
         }
-
-
     }
+    
 
     if (auth.isAuthenticated) {
         return <Navigate to="/"/>
     }
 
   return (
-    <div className='login'>
+    <article className='box-wrap'>
 
-          <h2 className='login__title'>Login</h2>
+          <div className='login'>
 
-          <form onSubmit={onSubmit} className='login__form'>
-            <div className='form__item'>
-                  <label htmlFor="email" className='form__item-label'>Email</label>
-                  <input type="email" name='email' value={formData.email} onChange={(e) => handleInputData(e)} className='form__item-input' required />
-            </div>
+              <Form 
+                title='Login' 
+                onSubmit={handleSubmit(onSubmit)}
+                  sideAction={<a href="/auth/register">Signup</a>}
+                >
+                    <>
+                      <FormInput
+                          label='Email'
+                          name='email'
+                          type='text'
+                          placeholder='Email...'
+                          register={formFields.email}
+                          error={errors}
+                          size={12}
+                      />
 
-            <div className='form__item'>
-                  <label htmlFor="password" className='form__item-label'>Password</label>
-                  <input type="password" name='password' value={formData.password} onChange={(e) => handleInputData(e)} className='form__item-input' required />
-            </div>
-
-            <div className='form__item'>
-                  <a href="/auth/register">Signup</a>
-                  <input type="submit" value="Login" className='form__item-input' />
-            </div>
-          </form>
-    </div>
+                      <FormInput
+                          label='Password'
+                          name='password'
+                          type='password'
+                          placeholder='Password...'
+                          register={formFields.password}
+                          error={errors}
+                          size={12}
+                      /></>
+              </Form>
+          </div>
+    </article>
   )
 }
 
