@@ -21,7 +21,6 @@ interface ILogin {
 const Login = () => {
     const auth = useAuth();
     const { register, handleSubmit, formState:{errors} } = useForm();
-    const [formData, setFormData] = useState<ILogin>({email: "", password: ""});
 
     const formFields = {
         email: register('email', {
@@ -38,17 +37,6 @@ const Login = () => {
         })
     }
     
-    
-    function handleInputData(e: React.SyntheticEvent) {
-        
-        let { name, value } = e.target as HTMLInputElement;
-        
-        setFormData({
-            ...formData,
-            [name]: value,
-        })
-    }
-    
     async function onSubmit(data:any) {
 
         let response = await requestData({ method: 'post', endpoint: '/auth/login', data });
@@ -59,7 +47,6 @@ const Login = () => {
             window.localStorage.setItem('token', JSON.stringify(token));
         }
     }
-    
 
     if (auth.isAuthenticated) {
         return <Navigate to="/"/>

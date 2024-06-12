@@ -42,11 +42,17 @@ export const AuthProvider = ({children}:IAuthProvider) => {
                     Authorization: `${authorization}`
                 } })
 
-                setUser(response?.data?.user)
-                setIsAuthenticated(true)
+                if (response?.status) {
+                    setUser(response?.user)
+                    setIsAuthenticated(true);
+                }else{
+                    logout();
+                }
+
 
             } catch (error) {
-                console.error(error)
+                console.error(error);
+                logout()
             }finally{
                 setLoading(false)
             }

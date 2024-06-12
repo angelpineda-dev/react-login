@@ -12,15 +12,24 @@ export const AxiosInterceptor = () => {
         return response
     }, function (error) {
 
-        
-        let errors = error?.response?.data?.error;
+        if(error?.response?.data?.status == false){
 
-        errors.forEach((err) => {
-            toast.error(err,{
-                duration: 3000
-            })
-        });
+            if (error?.response?.data?.message){
+                toast.error(error?.response?.data?.message, {duration: 3000})
+            }else{
+                let errors = error?.response?.data?.error
+
+                errors.forEach((err) => {
+                    toast.error(err, {
+                        duration: 3000
+                    })
+                });
+            }
+
+            return error;
+        }
 
         return error;
+
     })
 }

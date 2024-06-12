@@ -2,15 +2,15 @@ import axios from "axios";
 
 
 interface IrequestData {
-    method: 'get' | 'post' | 'put' | 'delete';
     endpoint: string;
+    method?: 'get' | 'post' | 'put' | 'delete';
     data?: object;
     headers?: object;
 }
 
 const BASE_URL = 'http://localhost:8080/api';
 
-async function requestData({ method, endpoint, data = {}, headers = {'Content-type': 'application/json'} }:IrequestData) {
+async function requestData({ method = 'get', endpoint, data = {}, headers = {'Content-type': 'application/json'} }:IrequestData) {
 
     try {
         const response = await axios({
