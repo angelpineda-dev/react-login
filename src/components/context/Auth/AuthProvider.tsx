@@ -51,8 +51,8 @@ export const AuthProvider = ({children}:IAuthProvider) => {
 
 
             } catch (error) {
-                console.error(error);
                 logout()
+                console.error(error);
             }finally{
                 setLoading(false)
             }
