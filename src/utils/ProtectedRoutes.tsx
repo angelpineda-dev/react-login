@@ -1,12 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../components/context/Auth/AuthProvider';
+import { useEffect, useState } from 'react';
 
 
 const ProtectedRoutes = () => {
-    const { isAuthenticated } = useAuth();
+    const { getUser } = useAuth();
 
   return (
-    isAuthenticated ? <Outlet/> : <Navigate to="/auth/login"/>
+      getUser()?.rol === 'ADMIN_ROLE' ? <Outlet /> : <Navigate to="/" />
   )
 }
 

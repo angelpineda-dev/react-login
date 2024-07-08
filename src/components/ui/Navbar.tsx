@@ -1,37 +1,21 @@
-import { useEffect, useState } from "react"
 
 import { Link } from "react-router-dom"
 
-import requestData from "../../helpers/request"
-import { CategoryResponse } from "../../interfaces/models"
+import { useGlobal } from "../context/GlobalContext/GlobalProvider"
 
 const Navbar = () => {
-    const [categories, setCategories] = useState<CategoryResponse>({} as CategoryResponse)
-
-    /**
-     * getCategories
-     * fetch categories
-     */
-    function getCategories() {
-        requestData({
-            endpoint: '/category'
-        }).then(res => setCategories(res))
-    }
-
-    useEffect(() => {
-        getCategories()
-    }, [])
-    
+    const { getCategories } = useGlobal();
 
   return (
       <nav className='flex justify-between p-2 bg-orange-800'>
           <Link to="/" className="text-white">Logo</Link>
           <ul className='flex justify-around  w-[50%]'>
             {
-                categories?.data?.categories.map( (category) => 
+                 
+                getCategories().map( (category) =>
                 (<li key={category.id}>
                     <Link
-                        to={`/category/${category.name}`}
+                        to={`/category/${category.name.toLowerCase()}`}
                         state={{
                             category: category
                         }}

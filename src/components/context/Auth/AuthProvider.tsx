@@ -1,5 +1,6 @@
 /* React */
 import { useState, useEffect, createContext, useContext } from 'react';
+import { Navigate } from 'react-router';
 
 import requestData from '../../../helpers/request';
 import { IUser } from '../../../interfaces/models';
@@ -22,6 +23,7 @@ export const AuthProvider = ({children}:IAuthProvider) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<IUser | undefined>(undefined);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false)
 
     useEffect(() => {
       checkSession();
@@ -43,12 +45,17 @@ export const AuthProvider = ({children}:IAuthProvider) => {
                 } })
 
                 if (response?.status) {
-                    setUser(response?.user)
+                    setUser(response?.user);
+
+                    if (response?.user?.rol == 'ADMIN_ROLE') {
+                        setIsAdmin(true)
+                    }else{
+                        setIsAdmin(false)
+                    }
                     setIsAuthenticated(true);
                 }else{
                     logout();
                 }
-
 
             } catch (error) {
                 logout()
@@ -74,6 +81,8 @@ export const AuthProvider = ({children}:IAuthProvider) => {
         setUser(undefined)
         setIsAuthenticated(false);
         window.localStorage.removeItem('token');
+        
+        return <Navigate to="/" /> 
     }
 
     return (
@@ -83,7 +92,16 @@ export const AuthProvider = ({children}:IAuthProvider) => {
         saveUser,
         logout
     }}>
-        {loading ? <h2>Loading...</h2> :children}
+        { loading 
+            ? <h2>Loading...</h2> 
+            : <div className={`${isAdmin ? 'flex' : '' } h-full`} > 
+                { user?.rol === 'ADMIN_ROLE' && 
+                <aside className='w-[250px] bg-blue-950'> soy un aside </aside>}
+                <div className={isAdmin ? 'w-full' : ''}>
+                    {children}
+                </div>
+             </div>
+        }
     </AuthContext.Provider>
   )
 }

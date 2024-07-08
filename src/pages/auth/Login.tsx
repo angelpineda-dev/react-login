@@ -49,7 +49,12 @@ const Login = () => {
     }
 
     if (auth.isAuthenticated) {
-        return <Navigate to="/"/>
+
+        if (auth.getUser().rol === 'ADMIN_ROLE') {
+            return <Navigate to='/dashboard' />
+        }else{
+            return <Navigate to="/"/>
+        }
     }
 
   return (
@@ -60,7 +65,7 @@ const Login = () => {
               <Form 
                 title='Login' 
                 onSubmit={handleSubmit(onSubmit)}
-                sideAction={<a href="/auth/register">Signup</a>}
+                sideAction={<a href="/register">Signup</a>}
                 >
                     <>
                       <FormInput
