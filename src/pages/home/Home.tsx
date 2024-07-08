@@ -24,10 +24,6 @@ const Home = () => {
 
     return (
         <>
-            {
-                getUser()?.rol !== 'ADMIN_ROLE' ?  <Navbar />  : <AdminNavbar/>
-            }
-
             <div>
                 <h1 className='text-center text-2xl mt-4'>Principales products</h1>
 

@@ -10,6 +10,7 @@ interface IAuthContext {
     isAuthenticated: boolean;
     getUser: () => IUser;
     saveUser: (user: IUser) => void;
+    isAdmin: boolean;
     logout: () => void;
 }
 
@@ -46,13 +47,14 @@ export const AuthProvider = ({children}:IAuthProvider) => {
 
                 if (response?.status) {
                     setUser(response?.user);
+                    setIsAuthenticated(true);
 
-                    if (response?.user?.rol == 'ADMIN_ROLE') {
+                    if (response?.user?.rol === 'ADMIN_ROLE') {
                         setIsAdmin(true)
                     }else{
                         setIsAdmin(false)
                     }
-                    setIsAuthenticated(true);
+
                 }else{
                     logout();
                 }
@@ -70,7 +72,13 @@ export const AuthProvider = ({children}:IAuthProvider) => {
 
     function saveUser(user:IUser) {
         setUser(user);
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
+
+        if (user?.rol === 'ADMIN_ROLE') {
+            setIsAdmin(true)
+        }else{
+            setIsAdmin(false)
+        }
     }
 
     function getUser() {
@@ -82,7 +90,7 @@ export const AuthProvider = ({children}:IAuthProvider) => {
         setIsAuthenticated(false);
         window.localStorage.removeItem('token');
         
-        return <Navigate to="/" /> 
+        return window.location.reload();
     }
 
     return (
@@ -90,17 +98,12 @@ export const AuthProvider = ({children}:IAuthProvider) => {
         isAuthenticated,
         getUser,
         saveUser,
+        isAdmin,
         logout
     }}>
         { loading 
             ? <h2>Loading...</h2> 
-            : <div className={`${isAdmin ? 'flex' : '' } h-full`} > 
-                { user?.rol === 'ADMIN_ROLE' && 
-                <aside className='w-[250px] bg-blue-950'> soy un aside </aside>}
-                <div className={isAdmin ? 'w-full' : ''}>
-                    {children}
-                </div>
-             </div>
+            : children
         }
     </AuthContext.Provider>
   )

@@ -6,7 +6,6 @@ const Dashboard = () => {
 
   return (
     <>
-        <AdminNavbar />
         <h1>Dashboard</h1>
     </>
   )

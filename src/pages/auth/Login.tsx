@@ -50,7 +50,7 @@ const Login = () => {
 
     if (auth.isAuthenticated) {
 
-        if (auth.getUser().rol === 'ADMIN_ROLE') {
+        if (auth.isAdmin) {
             return <Navigate to='/dashboard' />
         }else{
             return <Navigate to="/"/>

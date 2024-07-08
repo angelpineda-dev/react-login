@@ -5,14 +5,20 @@ import Login from '../../pages/auth/Login';
 import ProtectedRoutes from '../../utils/ProtectedRoutes';
 import Category from '../../pages/category/Category';
 import Dashboard from '../../pages/dashboard/Dashboard';
+import App from '../../App';
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
 
-                <Route path="category/:name" element={<Category />} />
+                <Route path='/' element={<App />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="category/:name" element={<Category />} />
+                    
+                </Route>
+
+
 
                 {/* TODO: group by auth/name */}
                 <Route path="/login" element={<Login />} />
@@ -22,7 +28,10 @@ const Router = () => {
                     <Route
                         path="/dashboard"
                         element={<Dashboard />}
-                        errorElement={<h2>Error dashboard</h2>}
+                    />
+                    <Route
+                        path="/categories"
+                        element={<h2>Categories</h2>}
                     />
                 </Route>
 

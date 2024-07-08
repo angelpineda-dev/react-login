@@ -1,14 +1,15 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../components/context/Auth/AuthProvider';
 import { useEffect, useState } from 'react';
+import Navbar from '../components/ui/Navbar';
 
 
 const ProtectedRoutes = () => {
-    const { getUser } = useAuth();
+    const { isAdmin } = useAuth();
 
   return (
-      getUser()?.rol === 'ADMIN_ROLE' ? <Outlet /> : <Navigate to="/" />
-  )
+      isAdmin ? <Navbar > <Outlet /> </Navbar> : <Navigate to="/" />
+    )
 }
 
 export default ProtectedRoutes;

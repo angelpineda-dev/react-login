@@ -47,8 +47,6 @@ const Category = () => {
 
     return (
         <>
-            <Navbar />
-
             <h1>{state.category?.name}</h1>
 
             <ul className='grid grid-cols-3 gap-2 p-2'>
