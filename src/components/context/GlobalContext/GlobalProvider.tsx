@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react"
 /* Libraries */
 import toast, { Toaster } from "react-hot-toast";
 import requestData from "../../../helpers/request";
-import { CategoryResponse } from "../../../interfaces/models";
-import { Category } from "../../../interfaces/models/CategoryResponse";
+import { CategoryResponse } from "../../../interfaces/models/CategoryResponse";
+import { Category } from "../../../interfaces/models";
 
 interface IGlobalContext {
     toast: any;
@@ -16,7 +16,7 @@ const GlobalContext = createContext({} as IGlobalContext)
 export const GlobalProvider = ({children}) => {
     const [categories, setCategories] = useState<Category[]>([]);
 
-    function getCategories():Category[] {
+    function getCategories():any[] {
         return categories;
     }
 
@@ -28,7 +28,7 @@ export const GlobalProvider = ({children}) => {
         requestData({
             endpoint: '/category'
         }).then((res: CategoryResponse) => {
-            setCategories(res.data.categories)
+            setCategories(res?.data)
         })
     }
 

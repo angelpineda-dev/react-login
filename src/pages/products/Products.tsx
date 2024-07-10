@@ -8,7 +8,7 @@ import requestData from '../../helpers/request';
 
 import { Product, ProductResponse } from '../../interfaces/models/ProductResponse';
 
-const Category = () => {
+const Products = () => {
     let { state } = useLocation();
     const [productResponse, setProductResponse] = useState({} as ProductResponse)
 
@@ -19,7 +19,10 @@ const Category = () => {
     function getProductsByCategory() {
         requestData({
             endpoint: `/product/${state?.category.id}`
-        }).then(res => setProductResponse(res))
+        }).then(res => {
+            setProductResponse(res);
+            //console.log(res)
+        })
     }
 
     /**
@@ -50,10 +53,10 @@ const Category = () => {
             <h1>{state.category?.name}</h1>
 
             <ul className='grid grid-cols-3 gap-2 p-2'>
-                {drawProducts(productResponse?.data?.products)}
+                {drawProducts(productResponse?.data)}
             </ul>
         </>
     )
 }
 
-export default Category
+export default Products

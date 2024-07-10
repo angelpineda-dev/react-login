@@ -1,6 +1,5 @@
 /* React */
 import { useState, useEffect, createContext, useContext } from 'react';
-import { Navigate } from 'react-router';
 
 import requestData from '../../../helpers/request';
 import { IUser } from '../../../interfaces/models';
@@ -24,11 +23,12 @@ export const AuthProvider = ({children}:IAuthProvider) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<IUser | undefined>(undefined);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
       checkSession();
     }, [])
+    
     
     async function checkSession(){
         const token = localStorage.getItem('token');
@@ -86,11 +86,17 @@ export const AuthProvider = ({children}:IAuthProvider) => {
     }
 
     function logout() {
+        setLoading(true);
+
         setUser(undefined)
         setIsAuthenticated(false);
         window.localStorage.removeItem('token');
+
         
-        return window.location.reload();
+        setTimeout(() => {
+            setLoading(false)
+            window.location.replace('/');
+        }, 200);
     }
 
     return (

@@ -1,19 +1,13 @@
 import { Outlet } from "react-router"
-import Navbar from "./components/ui/Navbar"
-import { useAuth } from "./components/context/Auth/AuthProvider"
+
+import Layout from "./components/ui/Layout/Layout";
 
 function App() {
 
-    const { isAdmin } = useAuth();
-
   return (
-    <>
-        <Navbar >
-            <Outlet/>
-        </Navbar> 
-
-        
-    </>    
+    <Layout>
+        <Outlet/>
+    </Layout>
   )
 }
 

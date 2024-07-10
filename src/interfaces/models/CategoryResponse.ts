@@ -1,14 +1,10 @@
 export interface CategoryResponse {
     status: boolean;
-    data: Data;
-}
-
-export interface Data {
-    categories: Category[];
+    data: Datum[];
     pagination: Pagination;
 }
 
-export interface Category {
+export interface Datum {
     name: string;
     user: string;
     status: boolean;
