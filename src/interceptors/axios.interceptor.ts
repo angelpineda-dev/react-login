@@ -2,7 +2,14 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export const AxiosInterceptor = () => {
-    axios.interceptors.request.use((request) => {
+
+    axios.interceptors.request.use( (request) => {
+
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            request.headers['token'] = JSON.parse(token);
+        }
 
         return request;
     });
@@ -25,11 +32,9 @@ export const AxiosInterceptor = () => {
                     })
                 });
             }
-
-            return error;
         }
 
-        return error;
+        return Promise.reject(error);
 
     })
 }
