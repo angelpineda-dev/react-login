@@ -1,0 +1,11 @@
+.modal{
+    @apply fixed bg-slate-800 h-full w-full text-white bg-opacity-80 top-0 flex justify-center items-center;
+}
+
+.modal__container{
+    @apply bg-white rounded-md min-h-[250px] min-w-[250px] text-black flex-col justify-center p-2;
+
+    &-header{
+        @apply flex justify-between items-center w-full border-b-slate-300 border-b py-2;
+    }
+}
