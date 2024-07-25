@@ -54,3 +54,20 @@ a:hover{
     background-color: #f9f9f9;
   }
 }
+
+
+.control {
+    @apply overflow-hidden p-1 flex justify-center items-center max-w-min;
+
+    #{&}-label {
+        @apply inline mr-1;
+    }
+
+    #{&}-input {
+        @apply px-2 py-1 mx-[1px] outline outline-gray-100 rounded-sm;
+    }
+
+    #{&}-error {
+        @apply inline-block text-[12px] text-red-600 bg-red-200 rounded-sm p-[2px] text-center;
+    }
+}

@@ -1,36 +1,15 @@
-import { useEffect, useState } from "react"
-import requestData from "../../helpers/request";
-import DataTable from "../../components/DataTable/DataTable";
+import CategoryTable from "./CategoryTable/CategoryTable";
 
 const Dashboard = () => {
-    const [Categories, setCategories] = useState({});
-
-    useEffect(() => {
-      requestData({
-        endpoint: '/category'
-      })
-    }, [])
 
   return (
     <>
         <h1 className="text-3xl text-center">Dashboard</h1>
 
-        <DataTable 
-            service='category'
-            title="Categorias"
-        />
+        <CategoryTable />
 
         {/**
-         ** DataTable
-         * Tabla
-         * Titulo
-         * Barra busqueda
-         * Campos dinamicos
-         * Controles (limit, page)
          * Servicio
-         * - limit => select
-         * - page => buttons
-         * - paginacion
         */}
     </>
   )

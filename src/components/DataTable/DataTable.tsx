@@ -2,29 +2,43 @@ import { useEffect, useState } from 'react'
 
 import requestData from '../../helpers/request';    
 import useDebounce from '../../hooks/useDebounce';
+import { IDataTable } from './dataTable.interface';
 
-const DataTable = ({ service, title = '' }) => {
-    const [data, setData] = useState([]);
+const DataTable = <T extends {id: string}> ({ 
+    data = [],
+    columns,
+    controls,
+    title = '',
+    headerActions,
+    options = {
+        search:true
+    } 
+}:IDataTable<T>) => {
+    const [tableData, setTableData] = useState(data)
     const [search, setSearch] = useState('');
     const [sort, setSort] = useState({})
     const debounceText = useDebounce(search, 300, fetchData);
-    const [pagination, setPagination] = useState({
+    const [query, setQuery] = useState({
         limit: 10,
-        page: 1,
-        total: 0,
-        totalPages: 1
+        page: 1
     })
+    const [pagination, setPagination] = useState({...controls?.pagination})
 
     useEffect(() => {
-        fetchData();
-    }, [service])
+        //fetchData();
+    }, [query])
 
+    /**
+     * fetchData
+     * Fetchs data from service
+     */
     function fetchData() {
         requestData({
-            endpoint: `/${service}?limit=${pagination.limit}&page=${pagination.page}&search=${search}&sort=${sort}`
+            endpoint: `/category?limit=${query.limit}&page=${query.page}&search=${search}&sort=${sort}`
         }).then(response => {
+            
             if (response?.status) {
-                setData(response?.data);
+                setTableData(response?.data);
                 setPagination(response?.pagination)
             } else {
                 console.error('error')
@@ -32,6 +46,11 @@ const DataTable = ({ service, title = '' }) => {
         })
     }
 
+    /**
+     * handleSearch
+     * handle input change event to update search
+     * @param {React.ChangeEvent<HTMLInputElement>} e
+     */
     function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
         let text = e.target.value;
 
@@ -44,45 +63,77 @@ const DataTable = ({ service, title = '' }) => {
 
         <div className='table__controls flex flex-col'>
             <div className='flex justify-between'>
-                  <input 
-                    type="text" 
-                    name="search" 
-                    placeholder='Search...' 
-                    value={search}
-                    onChange={(e) => handleSearch(e)}
-                    />
+                  {
+                      options?.search && <input
+                          type="text"
+                          name="search"
+                          placeholder='Search...'
+                          value={search}
+                          onChange={(e) => handleSearch(e)}
+                      />
+                  }
                   <div className='table__actions'>
-                    <button>Add</button>
+                      {headerActions}
                   </div>
             </div>
-            <div >
-                <p>Results: {pagination.total}</p>
+            <div className='flex justify-between items-center gap-2 py-2'>
+
+                <div className='control'>
+                      <label className='control-label'>Limit:</label>
+                      <input
+                          type='number'
+                          name='limit'
+                          value={query?.limit}
+                          onChange={(e) => setQuery({ ...query, limit: Number(e.target.value) })}
+                          className='control-input w-20 text-center'
+                          />
+                </div>
+                <p>Total: {pagination.totalItems}</p>
             </div>
         </div>
 
         <table className='w-full'>
             <thead>
                   <tr>
-                      <th>Name</th>
-                      <th>Description</th>
-                      <th>Actions</th>
+                      {
+                        columns?.map((col, idx) => <th key={`th-${idx}`}>{col?.title}</th>)
+                      }
                   </tr>
             </thead>
             <tbody>
                 {
-                    data.map(category => (
-                        <tr className='text-center' key={category?.id}>
-                            <td>{category?.name}</td>
-                            <td>{category?.description}</td>
-                            <td>
-                                <button>Edit</button>
-                                <button>Delete</button>
-                            </td>
+                      tableData.map((row) => (
+                        <tr className='text-center' key={row?.id}>
+                            {
+                                columns?.map(col => {
+                                    let content;
+
+                                    switch (typeof col?.column) {
+                                        case 'string':
+                                            content = row?.[col?.column]
+                                            break;
+
+                                        case 'function':
+                                            content = col?.column(row);
+                                            break;
+                                    
+                                        default:
+                                            'Setup behavior for this data type'
+                                            break;
+                                    }
+
+                                    return <td key={`td-${col?.title}-${row?.id}`}>{content}</td>
+                                })
+                            }
                         </tr>
                     ))
                 }
             </tbody>
         </table>
+
+        <section>
+            {/* TODO: pagination */}
+        </section>
     </section>
   )
 }
