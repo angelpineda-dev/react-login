@@ -21,6 +21,7 @@ interface ILogin {
 const Login = () => {
     const auth = useAuth();
     const { register, handleSubmit, formState } = useForm();
+    const { register, handleSubmit, formState } = useForm();
 
     const formFields = {
         email: register('email', {

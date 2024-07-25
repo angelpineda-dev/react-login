@@ -5,6 +5,13 @@ import Navbar from '../../components/ui/Navbar';
 import { useAuth } from '../../components/context/Auth/AuthProvider';
 import AdminNavbar from '../../components/ui/AdminNavbar/AdminNavbar';
 
+import Form from '../../components/Form/Form';
+import { FormInput } from '../../components/Form/FormInput';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type FormValues = {
+    description: string;
+}
 
 const Home = () => {
     const [products, setProducts] = useState<Product[]>([]);
