@@ -1,4 +1,6 @@
+import { UseFormProps } from 'react-hook-form';
 import './Form.scss';
+import { useEffect, useState } from 'react';
 
 interface FormInput {
     name: string;
@@ -9,7 +11,7 @@ interface FormInput {
     defaultValue?: string | number;
     disabled?:boolean;
     size?: number;
-    error: object;
+    formState: UseFormProps;
 }
 
 export const FormInput = ({
@@ -20,29 +22,28 @@ export const FormInput = ({
     placeholder,
     defaultValue = "",
     disabled = false,
-    size = 6,
-    error
+    size = 12,
+    formState
 }: FormInput) => {
+    const { errors } = formState;
 
     return (
-        <div className={`col-span-${size} form__field`}>
-            <label className='form__field-label'>
-                {label}
-            </label>
+        <div className={`col-${size} form__field`}>
+                <label className='form__field-label'>
+                    {label}
+                </label>
 
-            <input
-                name={name}
-                type={type} 
-                placeholder={placeholder}
-                defaultValue={defaultValue}
-                disabled={disabled}
-                {...register}
-                className='form__field-input'
-            />
+                <input
+                    name={name}
+                    type={type}
+                    placeholder={placeholder}
+                    defaultValue={defaultValue}
+                    disabled={disabled}
+                    className='form__field-input'
+                    {...register}
+                />
 
-            {
-                error?.[name] && <small className='form__field-error'>{error?.[name]?.message}</small>
-            }
-        </div>
+                {errors?.[name] && <small className='form__field-error'>{errors?.[name]?.message}</small>}
+            </div>
     )
 }

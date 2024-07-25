@@ -20,7 +20,7 @@ interface ILogin {
 
 const Login = () => {
     const auth = useAuth();
-    const { register, handleSubmit, formState:{errors} } = useForm();
+    const { register, handleSubmit, formState } = useForm();
 
     const formFields = {
         email: register('email', {
@@ -60,7 +60,7 @@ const Login = () => {
               <Form 
                 title='Login' 
                 onSubmit={handleSubmit(onSubmit)}
-                  sideAction={<a href="/auth/register">Signup</a>}
+                sideAction={<a href="/auth/register">Signup</a>}
                 >
                     <>
                       <FormInput
@@ -69,8 +69,7 @@ const Login = () => {
                           type='text'
                           placeholder='Email...'
                           register={formFields.email}
-                          error={errors}
-                          size={12}
+                          formState={formState}
                       />
 
                       <FormInput
@@ -79,9 +78,9 @@ const Login = () => {
                           type='password'
                           placeholder='Password...'
                           register={formFields.password}
-                          error={errors}
-                          size={12}
-                      /></>
+                          formState={formState}
+                      />
+                      </>
               </Form>
           </div>
     </article>
